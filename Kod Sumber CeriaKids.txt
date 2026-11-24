@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#FF7A00" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>CeriaKids — Game Belajar Kanak-Kanak</title>
+  <style>
+    :root {
+      --bg: #FFF9EC;
+      --card: #FFFFFF;
+      --primary: #FF7A00;
+      --primary-dark: #D96200;
+      --blue: #2B8CFF;
+      --blue-dark: #1A6ED8;
+      --green: #22C55E;
+      --green-dark: #16A34A;
+      --purple: #8B5CF6;
+      --purple-dark: #6D28D9;
+      --text: #1E293B;
+      --muted: #64748B;
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 4px 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      background: var(--primary);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 0 var(--primary-dark);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .star-badge {
+      background: #FEF08A;
+      border: 2px solid #FACC15;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #854D0E;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Screens */
+    .screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Menu Cards */
+    .welcome-banner {
+      background: linear-gradient(135deg, #FF9E2C, #FF7A00);
+      color: white;
+      padding: 18px;
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      box-shadow: 0 6px 0 var(--primary-dark);
+    }
+
+    .welcome-banner h2 {
+      margin: 0 0 4px;
+      font-size: 1.25rem;
+    }
+
+    .welcome-banner p {
+      margin: 0;
+      font-size: 0.9rem;
+      opacity: 0.95;
+    }
+
+    .game-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .game-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border: 3px solid #E2E8F0;
+      box-shadow: 0 6px 0 #CBD5E1;
+      cursor: pointer;
+      transition: transform 0.1s;
+      position: relative;
+    }
+
+    .game-card:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #CBD5E1;
+    }
+
+    .game-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      flex-shrink: 0;
+    }
+
+    .icon-blue { background: #DBEAFE; }
+    .icon-green { background: #DCFCE7; }
+    .icon-purple { background: #EDE9FE; }
+
+    .game-info h3 {
+      margin: 0 0 4px;
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .game-info p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 99px;
+      text-transform: uppercase;
+    }
+
+    .tag-free { background: #DCFCE7; color: #166534; }
+    .tag-pro { background: #FEF3C7; color: #92400E; }
+
+    /* Top Nav inside Game */
+    .game-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .btn-back {
+      background: white;
+      border: 2px solid #CBD5E1;
+      box-shadow: 0 4px 0 #CBD5E1;
+      border-radius: 14px;
+      padding: 8px 14px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .btn-back:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #CBD5E1;
+    }
+
+    .game-title {
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    /* Game 1: Memory Grid */
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .mem-card {
+      aspect-ratio: 1;
+      background: var(--blue);
+      border-radius: 18px;
+      box-shadow: 0 5px 0 var(--blue-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.2s;
+      color: white;
+    }
+
+    .mem-card.flipped, .mem-card.matched {
+      background: white;
+      border: 3px solid var(--blue);
+      box-shadow: 0 5px 0 #93C5FD;
+    }
+
+    .mem-card.matched {
+      border-color: var(--green);
+      background: #F0FDF4;
+      box-shadow: 0 5px 0 #86EFAC;
+    }
+
+    /* Game 2: Math Counting */
+    .math-stage {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 3px solid #E2E8F0;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .math-prompt {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .objects-box {
+      min-height: 130px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      font-size: 44px;
+      padding: 10px;
+      background: #F8FAFC;
+      border-radius: 16px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .btn-option {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 18px;
+      padding: 18px 10px;
+      font-size: 1.75rem;
+      font-weight: 900;
+      box-shadow: 0 6px 0 var(--green-dark);
+      cursor: pointer;
+    }
+
+    .btn-option:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 var(--green-dark);
+    }
+
+    /* Game 3: Suku Kata */
+    .word-stage {
+      background: white;
+      border-radius: var(--radius);
+      padding: 24px 16px;
+      border: 3px solid #E2E8F0;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .word-emoji {
+      font-size: 72px;
+      margin-bottom: 10px;
+    }
+
+    .syllable-slots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .slot {
+      padding: 10px 18px;
+      border-radius: 14px;
+      background: #F1F5F9;
+      border: 3px dashed #94A3B8;
+      min-width: 84px;
+    }
+
+    .slot.filled {
+      background: #EDE9FE;
+      border: 3px solid var(--purple);
+      color: var(--purple-dark);
+    }
+
+    .btn-syllable {
+      background: var(--purple);
+      color: white;
+      border: none;
+      border-radius: 18px;
+      padding: 16px 8px;
+      font-size: 1.4rem;
+      font-weight: 900;
+      box-shadow: 0 6px 0 var(--purple-dark);
+      cursor: pointer;
+    }
+
+    .btn-syllable:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 var(--purple-dark);
+    }
+
+    /* Parent / Pro Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    .modal-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.3rem;
+    }
+
+    .modal-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    .promo-input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #CBD5E1;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 800;
+      box-shadow: 0 4px 0 var(--primary-dark);
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-weight: 700;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .feedback-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1E293B;
+      color: white;
+      padding: 12px 22px;
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 1rem;
+      display: none;
+      z-index: 60;
+    }
+
+    footer {
+      margin-top: auto;
+      padding-top: 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">🦁</div>
+        <h1>CeriaKids</h1>
+      </div>
+      <div class="star-badge">⭐ <span id="starCount">0</span></div>
+    </header>
+
+    <!-- HOME SCREEN -->
+    <section id="screen-home" class="screen active">
+      <div class="welcome-banner">
+        <h2>Jom Main & Belajar! 🎉</h2>
+        <p>100% Selamat, Bebas Iklan & Boleh Main Offline.</p>
+      </div>
+
+      <div class="game-grid">
+        <div class="game-card" onclick="openGame('memory')">
+          <span class="tag tag-free">Percuma</span>
+          <div class="game-icon icon-blue">🐱</div>
+          <div class="game-info">
+            <h3>Padan Haiwan</h3>
+            <p>Cari pasangan gambar haiwan yang sama.</p>
+          </div>
+        </div>
+
+        <div class="game-card" onclick="openGame('math')">
+          <span class="tag tag-free">Percuma</span>
+          <div class="game-icon icon-green">🍎</div>
+          <div class="game-info">
+            <h3>Kira Objek</h3>
+            <p>Kira bilangan buah dan pilih nombor betul.</p>
+          </div>
+        </div>
+
+        <div class="game-card" onclick="openGame('syllable')">
+          <span id="proTag" class="tag tag-pro">🔒 Pek Pro</span>
+          <div class="game-icon icon-purple">📖</div>
+          <div class="game-info">
+            <h3>Eja Suku Kata</h3>
+            <p>Lengkapkan perkataan Bahasa Melayu mudah.</p>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        Mod Ibu Bapa • <span style="text-decoration:underline;cursor:pointer;" onclick="openProModal()">Buka Pek Pro</span>
+      </footer>
+    </section>
+
+    <!-- GAME 1: MEMORY -->
+    <section id="screen-memory" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Padan Haiwan</span>
+        <button class="btn-back" onclick="initMemory()">🔄</button>
+      </div>
+      <div id="memoryGrid" class="memory-grid"></div>
+    </section>
+
+    <!-- GAME 2: MATH -->
+    <section id="screen-math" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Kira Objek</span>
+        <span style="width:48px;"></span>
+      </div>
+      <div class="math-stage">
+        <div class="math-prompt">Ada berapa semuanya?</div>
+        <div id="mathObjects" class="objects-box"></div>
+      </div>
+      <div id="mathOptions" class="options-grid"></div>
+    </section>
+
+    <!-- GAME 3: SUKU KATA (PRO) -->
+    <section id="screen-syllable" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Eja Suku Kata</span>
+        <span style="width:48px;"></span>
+      </div>
+      <div class="word-stage">
+        <div id="wordEmoji" class="word-emoji">⚽</div>
+        <div class="syllable-slots">
+          <div id="slotFirst" class="slot filled">BO</div>
+          <div id="slotSecond" class="slot">?</div>
+        </div>
+      </div>
+      <div id="syllableOptions" class="options-grid"></div>
+    </section>
+  </div>
+
+  <!-- PRO UNLOCK MODAL -->
+  <div id="proModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="font-size:44px;margin-bottom:8px;">🔓</div>
+      <h3>Buka Pek Pro CeriaKids</h3>
+      <p>Masukkan kod akses daripada ibu bapa untuk membuka game <b>Eja Suku Kata</b> tanpa had.</p>
+      <input id="promoInput" class="promo-input" type="text" placeholder="KOD PROMO" />
+      <button class="btn-primary" onclick="unlockPro()">Aktifkan Sekarang</button>
+      <button class="btn-ghost" onclick="closeProModal()">Tutup</button>
+    </div>
+  </div>
+
+  <div id="toast" class="feedback-toast">Hebat! +1 ⭐</div>
+
+  <script>
+    // --- AUDIO ENGINE (WEB AUDIO API - NO EXTERNAL MP3 NEEDED) ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playTone(freq, type = 'sine', duration = 0.15) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playSuccessSound() {
+      playTone(523.25, 'triangle', 0.12);
+      setTimeout(() => playTone(659.25, 'triangle', 0.12), 110);
+      setTimeout(() => playTone(783.99, 'triangle', 0.25), 220);
+    }
+
+    function playErrorSound() {
+      playTone(220, 'sawtooth', 0.2);
+    }
+
+    // --- STATE & STORAGE ---
+    let stars = parseInt(localStorage.getItem('ck_stars') || '0', 10);
+    let isPro = localStorage.getItem('ck_pro') === 'true';
+
+    function updateUI() {
+      document.getElementById('starCount').textContent = stars;
+      const proTag = document.getElementById('proTag');
+      if (isPro) {
+        proTag.textContent = '⭐ Pro Aktif';
+        proTag.className = 'tag tag-free';
+      }
+    }
+
+    function addStar(amount = 1, msg = 'Hebat! +1 ⭐') {
+      stars += amount;
+      localStorage.setItem('ck_stars', stars);
+      updateUI();
+      showToast(msg);
+    }
+
+    function showToast(text) {
+      const t = document.getElementById('toast');
+      t.textContent = text;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 1400);
+    }
+
+    // --- NAVIGATION ---
+    function switchScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function goHome() {
+      playTone(400, 'sine', 0.08);
+      switchScreen('screen-home');
+    }
+
+    function openGame(game) {
+      playTone(500, 'sine', 0.08);
+      if (game === 'memory') {
+        initMemory();
+        switchScreen('screen-memory');
+      } else if (game === 'math') {
+        initMath();
+        switchScreen('screen-math');
+      } else if (game === 'syllable') {
+        if (!isPro) {
+          openProModal();
+          return;
+        }
+        initSyllable();
+        switchScreen('screen-syllable');
+      }
+    }
+
+    // --- PRO UNLOCK ---
+    function openProModal() {
+      document.getElementById('proModal').classList.add('open');
+    }
+    function closeProModal() {
+      document.getElementById('proModal').classList.remove('open');
+    }
+    function unlockPro() {
+      const code = document.getElementById('promoInput').value.trim().toUpperCase();
+      if (code === 'CERIAPRO') {
+        isPro = true;
+        localStorage.setItem('ck_pro', 'true');
+        updateUI();
+        closeProModal();
+        playSuccessSound();
+        showToast('Pek Pro Dibuka! 🎉');
+      } else {
+        playErrorSound();
+        showToast('Kod tidak sah');
+      }
+    }
+
+    // --- GAME 1: MEMORY ---
+    const animals = ['🐱', '🐯', '🐘', '🐵', '🐸', '🐢'];
+    let flippedCards = [];
+    let matchedCount = 0;
+
+    function initMemory() {
+      const grid = document.getElementById('memoryGrid');
+      grid.innerHTML = '';
+      flippedCards = [];
+      matchedCount = 0;
+      const deck = [...animals, ...animals].sort(() => Math.random() - 0.5);
+
+      deck.forEach((emoji) => {
+        const card = document.createElement('div');
+        card.className = 'mem-card';
+        card.textContent = '?';
+        card.dataset.emoji = emoji;
+        card.onclick = () => flipCard(card);
+        grid.appendChild(card);
+      });
+    }
+
+    function flipCard(card) {
+      if (card.classList.contains('flipped') || card.classList.contains('matched') || flippedCards.length === 2) return;
+      playTone(440, 'sine', 0.1);
+      card.classList.add('flipped');
+      card.textContent = card.dataset.emoji;
+      flippedCards.push(card);
+
+      if (flippedCards.length === 2) {
+        const [c1, c2] = flippedCards;
+        if (c1.dataset.emoji === c2.dataset.emoji) {
+          setTimeout(() => {
+            c1.classList.add('matched');
+            c2.classList.add('matched');
+            flippedCards = [];
+            matchedCount++;
+            playSuccessSound();
+            if (matchedCount === animals.length) {
+              addStar(2, 'Tahniah! Semua Padan! +2 ⭐');
+              setTimeout(initMemory, 1600);
+            }
+          }, 350);
+        } else {
+          setTimeout(() => {
+            c1.classList.remove('flipped');
+            c2.classList.remove('flipped');
+            c1.textContent = '?';
+            c2.textContent = '?';
+            flippedCards = [];
+          }, 750);
+        }
+      }
+    }
+
+    // --- GAME 2: MATH COUNTING ---
+    const mathItems = ['🍎', '🍌', '🍓', '🚗', '⭐', '🎈', '🐟'];
+    let currentAnswer = 0;
+
+    function initMath() {
+      const count = Math.floor(Math.random() * 7) + 2; // 2 to 8
+      currentAnswer = count;
+      const item = mathItems[Math.floor(Math.random() * mathItems.length)];
+
+      const box = document.getElementById('mathObjects');
+      box.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const span = document.createElement('span');
+        span.textContent = item;
+        box.appendChild(span);
+      }
+
+      let choices = new Set([count]);
+      while (choices.size < 3) {
+        let fake = Math.floor(Math.random() * 8) + 1;
+        choices.add(fake);
+      }
+
+      const optContainer = document.getElementById('mathOptions');
+      optContainer.innerHTML = '';
+      Array.from(choices).sort(() => Math.random() - 0.5).forEach(num => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-option';
+        btn.textContent = num;
+        btn.onclick = () => checkMath(num);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function checkMath(selected) {
+      if (selected === currentAnswer) {
+        playSuccessSound();
+        addStar(1, 'Betul! +1 ⭐');
+        setTimeout(initMath, 900);
+      } else {
+        playErrorSound();
+        showToast('Cuba kira semula! 🔍');
+      }
+    }
+
+    // --- GAME 3: SUKU KATA ---
+    const wordBank = [
+      { emoji: '⚽', first: 'BO', second: 'LA', distractors: ['KU', 'TU'] },
+      { emoji: '📕', first: 'BU', second: 'KU', distractors: ['LA', 'MA'] },
+      { emoji: '👀', first: 'MA', second: 'TA', distractors: ['KI', 'JA'] },
+      { emoji: '🪑', first: 'ME', second: 'JA', distractors: ['SA', 'RU'] },
+      { emoji: '👕', first: 'BA', second: 'JU', distractors: ['TU', 'PI'] },
+      { emoji: '🧢', first: 'TO', second: 'PI', distractors: ['LA', 'KU'] }
+    ];
+    let currentWord = null;
+
+    function initSyllable() {
+      currentWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+      document.getElementById('wordEmoji').textContent = currentWord.emoji;
+      document.getElementById('slotFirst').textContent = currentWord.first;
+      const secondSlot = document.getElementById('slotSecond');
+      secondSlot.textContent = '?';
+      secondSlot.classList.remove('filled');
+
+      const opts = [currentWord.second, ...currentWord.distractors].sort(() => Math.random() - 0.5);
+      const container = document.getElementById('syllableOptions');
+      container.innerHTML = '';
+      opts.forEach(syl => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-syllable';
+        btn.textContent = syl;
+        btn.onclick = () => checkSyllable(syl);
+        container.appendChild(btn);
+      });
+    }
+
+    function checkSyllable(syl) {
+      if (syl === currentWord.second) {
+        const secondSlot = document.getElementById('slotSecond');
+        secondSlot.textContent = syl;
+        secondSlot.classList.add('filled');
+        playSuccessSound();
+        addStar(1, `Pandai! ${currentWord.first}${currentWord.second}! +1 ⭐`);
+        setTimeout(initSyllable, 1100);
+      } else {
+        playErrorSound();
+        showToast('Kurang tepat, cuba lagi!');
+      }
+    }
+
+    // --- INLINE PWA MANIFEST & SERVICE WORKER ---
+    const manifest = {
+      name: 'CeriaKids - Game Belajar Kanak-Kanak',
+      short_name: 'CeriaKids',
+      start_url: '.',
+      display: 'standalone',
+      background_color: '#FFF9EC',
+      theme_color: '#FF7A00',
+      icons: [{
+        src: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23FF7A00%22/><text y=%22.9em%22 font-size=%2275%22 x=%2212%22>🦁</text></svg>',
+        sizes: '512x512',
+        type: 'image/svg+xml'
+      }]
+    };
+    const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+    const manifestLink = document.createElement('link');
+    manifestLink.rel = 'manifest';
+    manifestLink.href = URL.createObjectURL(manifestBlob);
+    document.head.appendChild(manifestLink);
+
+    updateUI();
+  </script>
+</body>
+</html>
