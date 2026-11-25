@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#FF7A00" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>CeriaKids Pro — Belajar Sambil Bermain</title>
+  <style>
+    :root {
+      --bg: #FFF9EC;
+      --card: #FFFFFF;
+      --primary: #FF7A00;
+      --primary-dark: #D96200;
+      --blue: #2B8CFF;
+      --blue-dark: #1A6ED8;
+      --green: #22C55E;
+      --green-dark: #16A34A;
+      --purple: #8B5CF6;
+      --purple-dark: #6D28D9;
+      --pink: #EC4899;
+      --pink-dark: #BE185D;
+      --teal: #14B8A6;
+      --teal-dark: #0F766E;
+      --amber: #F59E0B;
+      --amber-dark: #B45309;
+      --text: #1E293B;
+      --muted: #64748B;
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      padding: 14px 16px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 2px 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #FF9E2C, #FF7A00);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 0 var(--primary-dark);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+      line-height: 1.1;
+    }
+
+    .brand small {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .star-badge {
+      background: #FEF08A;
+      border: 2px solid #FACC15;
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      color: #854D0E;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .btn-parent-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      border: 2px solid #E2E8F0;
+      background: white;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Screens */
+    .screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bouncePop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .pop-anim {
+      animation: bouncePop 0.35s ease;
+    }
+
+    /* Daily Mission & Sticker Shortcut */
+    .mission-card {
+      background: linear-gradient(135deg, #FF9E2C, #FF7A00);
+      color: white;
+      padding: 16px;
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      box-shadow: 0 6px 0 var(--primary-dark);
+    }
+
+    .mission-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .mission-top h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .mission-pill {
+      background: rgba(255,255,255,0.25);
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .progress-track {
+      background: rgba(0,0,0,0.18);
+      height: 12px;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-fill {
+      background: #FEF08A;
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    .sticker-cta {
+      background: rgba(255,255,255,0.95);
+      color: var(--primary-dark);
+      border: none;
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .timer-pill-bar {
+      background: #E0F2FE;
+      color: #0369A1;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    /* Section Labels & Game Grid */
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 8px 4px 10px;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .game-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      border: 3px solid #E2E8F0;
+      box-shadow: 0 5px 0 #CBD5E1;
+      cursor: pointer;
+      transition: transform 0.1s;
+      position: relative;
+    }
+
+    .game-card:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #CBD5E1;
+    }
+
+    .game-card.wide {
+      grid-column: span 2;
+      flex-direction: row;
+      text-align: left;
+      padding: 14px 16px;
+      gap: 14px;
+    }
+
+    .game-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .game-card.wide .game-icon {
+      margin-top: 0;
+    }
+
+    .icon-blue { background: #DBEAFE; }
+    .icon-green { background: #DCFCE7; }
+    .icon-pink { background: #FCE7F3; }
+    .icon-purple { background: #EDE9FE; }
+    .icon-orange { background: #FFEDD5; }
+    .icon-teal { background: #CCFBF1; }
+    .icon-amber { background: #FEF3C7; }
+    .icon-emerald { background: #D1FAE5; }
+
+    .game-info h3 {
+      margin: 0 0 3px;
+      font-size: 0.98rem;
+      font-weight: 800;
+    }
+
+    .game-info p {
+      margin: 0;
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .tag {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 0.64rem;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 99px;
+      text-transform: uppercase;
+    }
+
+    .tag-free { background: #DCFCE7; color: #166534; }
+    .tag-pro { background: #FEF3C7; color: #92400E; }
+
+    /* Top Nav inside Game */
+    .game-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .btn-back {
+      background: white;
+      border: 2px solid #CBD5E1;
+      box-shadow: 0 4px 0 #CBD5E1;
+      border-radius: 14px;
+      padding: 8px 14px;
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .btn-back:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #CBD5E1;
+    }
+
+    .game-title {
+      font-weight: 900;
+      font-size: 1.05rem;
+    }
+
+    /* Shared Game Stage */
+    .stage-box {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      border: 3px solid #E2E8F0;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .stage-prompt {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    /* Game 1: Memory */
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .mem-card {
+      aspect-ratio: 1;
+      background: var(--blue);
+      border-radius: 18px;
+      box-shadow: 0 5px 0 var(--blue-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      cursor: pointer;
+      color: white;
+      font-weight: 900;
+    }
+
+    .mem-card.flipped, .mem-card.matched {
+      background: white;
+      border: 3px solid var(--blue);
+      box-shadow: 0 5px 0 #93C5FD;
+    }
+
+    .mem-card.matched {
+      border-color: var(--green);
+      background: #F0FDF4;
+      box-shadow: 0 5px 0 #86EFAC;
+    }
+
+    /* Game 2 & 6: Math & Addition */
+    .objects-box {
+      min-height: 120px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-size: 40px;
+      padding: 12px;
+      background: #F8FAFC;
+      border-radius: 16px;
+    }
+
+    .math-equation {
+      font-size: 2.3rem;
+      font-weight: 900;
+      color: var(--blue-dark);
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .btn-option {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 18px;
+      padding: 18px 8px;
+      font-size: 1.7rem;
+      font-weight: 900;
+      box-shadow: 0 6px 0 var(--green-dark);
+      cursor: pointer;
+    }
+
+    .btn-option:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 var(--green-dark);
+    }
+
+    /* Game 3: Color */
+    .color-target-circle {
+      width: 118px;
+      height: 118px;
+      border-radius: 50%;
+      margin: 8px auto;
+      border: 5px solid #E2E8F0;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+    }
+
+    .btn-color-choice {
+      background: white;
+      color: var(--text);
+      border: 3px solid #CBD5E1;
+      border-radius: 18px;
+      padding: 16px 6px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      box-shadow: 0 5px 0 #CBD5E1;
+      cursor: pointer;
+    }
+
+    /* Game 4: Suku Kata */
+    .word-emoji {
+      font-size: 68px;
+      margin-bottom: 8px;
+    }
+
+    .syllable-slots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      font-size: 1.9rem;
+      font-weight: 900;
+    }
+
+    .slot {
+      padding: 10px 18px;
+      border-radius: 14px;
+      background: #F1F5F9;
+      border: 3px dashed #94A3B8;
+      min-width: 82px;
+    }
+
+    .slot.filled {
+      background: #EDE9FE;
+      border: 3px solid var(--purple);
+      color: var(--purple-dark);
+    }
+
+    .btn-syllable {
+      background: var(--purple);
+      color: white;
+      border: none;
+      border-radius: 18px;
+      padding: 16px 8px;
+      font-size: 1.35rem;
+      font-weight: 900;
+      box-shadow: 0 6px 0 var(--purple-dark);
+      cursor: pointer;
+    }
+
+    /* Game 5: Hijaiyah */
+    .hijaiyah-big {
+      font-size: 96px;
+      font-weight: 900;
+      color: #065F46;
+      line-height: 1.15;
+      margin: 6px 0;
+    }
+
+    .btn-hijaiyah {
+      background: var(--teal);
+      color: white;
+      border: none;
+      border-radius: 18px;
+      padding: 16px 8px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      box-shadow: 0 6px 0 var(--teal-dark);
+      cursor: pointer;
+    }
+
+    /* Game 7: Drawing Canvas */
+    .canvas-wrapper {
+      background: white;
+      border-radius: var(--radius);
+      border: 3px solid #CBD5E1;
+      overflow: hidden;
+      touch-action: none;
+      margin-bottom: 10px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 290px;
+      background: #FFFFFF;
+    }
+
+    .palette-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      padding: 10px 12px;
+      border-radius: 18px;
+      border: 2px solid #E2E8F0;
+      margin-bottom: 10px;
+    }
+
+    .swatch {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px #CBD5E1;
+      cursor: pointer;
+    }
+
+    .swatch.active {
+      transform: scale(1.18);
+      box-shadow: 0 0 0 3px #1E293B;
+    }
+
+    .brush-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .brush-btn {
+      background: white;
+      border: 2px solid #CBD5E1;
+      border-radius: 12px;
+      padding: 6px 14px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .brush-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary-dark);
+    }
+
+    /* Game 8: Piano */
+    .song-guide-box {
+      background: #FEF3C7;
+      border: 2px solid #F59E0B;
+      border-radius: 16px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #92400E;
+    }
+
+    .piano-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .piano-key {
+      border: none;
+      border-radius: 20px;
+      padding: 18px 10px;
+      color: white;
+      font-size: 1.15rem;
+      font-weight: 900;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: transform 0.08s;
+    }
+
+    .piano-key.guide-glow {
+      outline: 5px solid #FEF08A;
+      transform: scale(1.04);
+    }
+
+    .piano-key span {
+      font-size: 32px;
+    }
+
+    /* Sticker Album */
+    .sticker-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .sticker-item {
+      background: white;
+      border: 3px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 14px 8px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .sticker-item.unlocked {
+      border-color: #FACC15;
+      background: #FEFCE8;
+    }
+
+    .sticker-emoji {
+      font-size: 42px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .sticker-item.locked .sticker-emoji {
+      filter: grayscale(1) opacity(0.35);
+    }
+
+    .sticker-name {
+      font-size: 0.76rem;
+      font-weight: 800;
+      display: block;
+    }
+
+    .sticker-cost {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-top: 3px;
+      display: block;
+    }
+
+    /* Parent Dashboard */
+    .parent-card {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      border: 2px solid #E2E8F0;
+      margin-bottom: 12px;
+    }
+
+    .parent-card h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #F1F5F9;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .timer-btn-group {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .timer-opt {
+      background: #F1F5F9;
+      border: 2px solid #CBD5E1;
+      border-radius: 12px;
+      padding: 10px 4px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .timer-opt.active {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue-dark);
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 60;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 24px;
+      padding: 22px;
+      width: 100%;
+      max-width: 390px;
+      text-align: center;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-card h3 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+      font-weight: 900;
+    }
+
+    .modal-card p {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin: 0 0 14px;
+      line-height: 1.4;
+    }
+
+    .pro-benefits {
+      text-align: left;
+      background: #FFF9EC;
+      border: 2px solid #FDE68A;
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      line-height: 1.65;
+    }
+
+    .price-banner {
+      background: #DCFCE7;
+      color: #166534;
+      padding: 10px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .promo-input {
+      width: 100%;
+      padding: 13px;
+      border: 2px solid #CBD5E1;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 13px;
+      border-radius: 14px;
+      font-size: 0.98rem;
+      font-weight: 800;
+      box-shadow: 0 4px 0 var(--primary-dark);
+      cursor: pointer;
+      margin-bottom: 10px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .btn-whatsapp {
+      width: 100%;
+      background: #25D366;
+      color: white;
+      border: none;
+      padding: 13px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      box-shadow: 0 4px 0 #128C7E;
+      cursor: pointer;
+      margin-bottom: 12px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-weight: 700;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    /* Toast & Confetti */
+    .feedback-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1E293B;
+      color: white;
+      padding: 12px 22px;
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      display: none;
+      z-index: 80;
+      white-space: nowrap;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      top: -12px;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      z-index: 90;
+      pointer-events: none;
+      animation: confettiFall 1.1s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(75vh) rotate(540deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">🦁</div>
+        <div>
+          <h1>CeriaKids</h1>
+          <small>Belajar • Bebas Iklan</small>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="star-badge" onclick="openStickers()">⭐ <span id="starCount">0</span></div>
+        <button class="btn-parent-icon" onclick="openParentGate('dashboard')" title="Ruangan Ibu Bapa">👨‍👩‍👧</button>
+      </div>
+    </header>
+
+    <div id="timerBar" class="timer-pill-bar">⏱️ Baki Masa Bermain: <span id="timerDisplay">00:00</span></div>
+
+    <!-- HOME SCREEN -->
+    <section id="screen-home" class="screen active">
+      <div class="mission-card">
+        <div class="mission-top">
+          <h2>🎯 Misi Hari Ini</h2>
+          <span class="mission-pill"><span id="dailyCount">0</span> / 5 ⭐</span>
+        </div>
+        <div class="progress-track">
+          <div id="dailyFill" class="progress-fill"></div>
+        </div>
+        <button class="sticker-cta" onclick="openStickers()">
+          <span>🏆 Buka Buku Pelekat Saya (<span id="stickerCountHome">0</span>/12)</span>
+          <span>➔</span>
+        </button>
+      </div>
+
+      <div class="section-label">
+        <span>Modul Percuma</span>
+        <span style="color:#16A34A;">100% Bebas Iklan</span>
+      </div>
+      <div class="game-grid">
+        <div class="game-card" onclick="openGame('memory')">
+          <span class="tag tag-free">Percuma</span>
+          <div class="game-icon icon-blue">🐱</div>
+          <div class="game-info">
+            <h3>Padan Haiwan</h3>
+            <p>Latih daya ingatan & fokus.</p>
+          </div>
+        </div>
+
+        <div class="game-card" onclick="openGame('math')">
+          <span class="tag tag-free">Percuma</span>
+          <div class="game-icon icon-green">🍎</div>
+          <div class="game-info">
+            <h3>Kira Objek</h3>
+            <p>Asas nombor 1 hingga 10.</p>
+          </div>
+        </div>
+
+        <div class="game-card wide" onclick="openGame('color')">
+          <span class="tag tag-free">Percuma</span>
+          <div class="game-icon icon-pink">🎨</div>
+          <div class="game-info">
+            <h3>Teka Warna & Suara</h3>
+            <p>Kenal warna asas dengan sebutan Bahasa Melayu.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">
+        <span>Pek Lengkap Prasekolah (Pro)</span>
+        <span style="color:#D97706;cursor:pointer;text-decoration:underline;" onclick="openParentGate('pro')">Buka Semua</span>
+      </div>
+      <div class="game-grid">
+        <div class="game-card" onclick="openGame('syllable')">
+          <span class="tag tag-pro pro-badge-item">🔒 Pro</span>
+          <div class="game-icon icon-purple">📖</div>
+          <div class="game-info">
+            <h3>Eja Suku Kata</h3>
+            <p>Asas membaca BM (KV+KV).</p>
+          </div>
+        </div>
+
+        <div class="game-card" onclick="openGame('hijaiyah')">
+          <span class="tag tag-pro pro-badge-item">🔒 Pro</span>
+          <div class="game-icon icon-emerald">🕌</div>
+          <div class="game-info">
+            <h3>Huruf Hijaiyah</h3>
+            <p>Kenal & dengar Alif Ba Ta.</p>
+          </div>
+        </div>
+
+        <div class="game-card" onclick="openGame('addition')">
+          <span class="tag tag-pro pro-badge-item">🔒 Pro</span>
+          <div class="game-icon icon-amber">➕</div>
+          <div class="game-info">
+            <h3>Tambah Pantas</h3>
+            <p>Latihan kira tambah mudah.</p>
+          </div>
+        </div>
+
+        <div class="game-card" onclick="openGame('draw')">
+          <span class="tag tag-pro pro-badge-item">🔒 Pro</span>
+          <div class="game-icon icon-orange">🖌️</div>
+          <div class="game-info">
+            <h3>Melukis Jari</h3>
+            <p>Kreativiti lukis & warna.</p>
+          </div>
+        </div>
+
+        <div class="game-card wide" onclick="openGame('piano')">
+          <span class="tag tag-pro pro-badge-item">🔒 Pro</span>
+          <div class="game-icon icon-teal">🎹</div>
+          <div class="game-info">
+            <h3>Piano & Lagu Bintang Kecil</h3>
+            <p>Main bebas atau ikut lampu panduan lagu kanak-kanak.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STICKER ALBUM SCREEN -->
+    <section id="screen-stickers" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Buku Pelekat Saya</span>
+        <span style="width:48px;"></span>
+      </div>
+      <div class="stage-box" style="padding:12px;margin-bottom:14px;">
+        <div style="font-size:0.88rem;font-weight:800;color:var(--muted);">
+          Gunakan ⭐ bintang daripada permainan untuk membuka koleksi pelekat comel!
+        </div>
+      </div>
+      <div id="stickerGrid" class="sticker-grid"></div>
+    </section>
+
+    <!-- PARENT DASHBOARD SCREEN -->
+    <section id="screen-parent" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Keluar</button>
+        <span class="game-title">Ruangan Ibu Bapa</span>
+        <span style="width:48px;"></span>
+      </div>
+
+      <div class="parent-card">
+        <h3>📊 Laporan Kemajuan Anak</h3>
+        <div class="stat-row"><span>Jumlah Bintang Terkumpul</span><span id="statTotalStars">0 ⭐</span></div>
+        <div class="stat-row"><span>Suku Kata & Membaca</span><span id="statSyllable">0 Betul</span></div>
+        <div class="stat-row"><span>Huruf Hijaiyah</span><span id="statHijaiyah">0 Betul</span></div>
+        <div class="stat-row"><span>Matematik (Kira & Tambah)</span><span id="statMath">0 Betul</span></div>
+        <div class="stat-row"><span>Warna & Memori</span><span id="statGeneral">0 Betul</span></div>
+      </div>
+
+      <div class="parent-card">
+        <h3>⏱️ Kawalan Had Masa Skrin</h3>
+        <p style="font-size:0.8rem;color:var(--muted);margin:0 0 10px;">Aplikasi akan berhenti dengan mesej rehat apabila masa tamat.</p>
+        <div class="timer-btn-group">
+          <button class="timer-opt" onclick="setScreenTimer(0, this)">Tiada</button>
+          <button class="timer-opt" onclick="setScreenTimer(10, this)">10 Min</button>
+          <button class="timer-opt" onclick="setScreenTimer(20, this)">20 Min</button>
+          <button class="timer-opt" onclick="setScreenTimer(30, this)">30 Min</button>
+        </div>
+      </div>
+
+      <div class="parent-card">
+        <h3>🔑 Status Akaun: <span id="parentProStatus">Versi Percuma</span></h3>
+        <button class="btn-primary" onclick="openProModal()">Buka / Masukkan Kod Pek Pro</button>
+        <button class="btn-ghost" style="width:100%;color:#DC2626;" onclick="resetProgress()">Set Semula Rekod Anak</button>
+      </div>
+    </section>
+
+    <!-- GAME 1: MEMORY -->
+    <section id="screen-memory" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Padan Haiwan</span>
+        <button class="btn-back" onclick="initMemory()">🔄</button>
+      </div>
+      <div id="memoryGrid" class="memory-grid"></div>
+    </section>
+
+    <!-- GAME 2: MATH COUNTING -->
+    <section id="screen-math" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Kira Objek</span>
+        <span style="width:48px;"></span>
+      </div>
+      <div class="stage-box">
+        <div class="stage-prompt">Ada berapa semuanya?</div>
+        <div id="mathObjects" class="objects-box"></div>
+      </div>
+      <div id="mathOptions" class="options-grid"></div>
+    </section>
+
+    <!-- GAME 3: TEKA WARNA -->
+    <section id="screen-color" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Teka Warna</span>
+        <button class="btn-back" onclick="speakBM('Ini warna apa?')">🔊</button>
+      </div>
+      <div class="stage-box">
+        <div class="stage-prompt">Ini warna apa?</div>
+        <div id="colorCircle" class="color-target-circle">🎈</div>
+      </div>
+      <div id="colorOptions" class="options-grid"></div>
+    </section>
+
+    <!-- GAME 4: SUKU KATA (PRO) -->
+    <section id="screen-syllable" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Eja Suku Kata</span>
+        <button class="btn-back" onclick="speakBM(currentWord.first + currentWord.second)">🔊</button>
+      </div>
+      <div class="stage-box">
+        <div id="wordEmoji" class="word-emoji">⚽</div>
+        <div class="syllable-slots">
+          <div id="slotFirst" class="slot filled">BO</div>
+          <div id="slotSecond" class="slot">?</div>
+        </div>
+      </div>
+      <div id="syllableOptions" class="options-grid"></div>
+    </section>
+
+    <!-- GAME 5: HIJAIYAH (PRO) -->
+    <section id="screen-hijaiyah" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Huruf Hijaiyah</span>
+        <button class="btn-back" onclick="speakBM(currentHijaiyah.name)">🔊</button>
+      </div>
+      <div class="stage-box">
+        <div class="stage-prompt">Ini huruf apa?</div>
+        <div id="hijaiyahChar" class="hijaiyah-big">أ</div>
+      </div>
+      <div id="hijaiyahOptions" class="options-grid"></div>
+    </section>
+
+    <!-- GAME 6: TAMBAH PANTAS (PRO) -->
+    <section id="screen-addition" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Tambah Pantas</span>
+        <span style="width:48px;"></span>
+      </div>
+      <div class="stage-box">
+        <div id="addEquation" class="math-equation">2 + 3 = ?</div>
+        <div id="addVisual" class="objects-box" style="min-height:90px;font-size:32px;"></div>
+      </div>
+      <div id="addOptions" class="options-grid"></div>
+    </section>
+
+    <!-- GAME 7: MELUKIS (PRO) -->
+    <section id="screen-draw" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Melukis Jari</span>
+        <button class="btn-back" onclick="clearCanvas()">🗑️ Padam</button>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="drawCanvas"></canvas>
+      </div>
+      <div class="palette-row" id="paletteRow"></div>
+      <div class="brush-row">
+        <button class="brush-btn" onclick="setBrushSize(6, this)">Halus</button>
+        <button class="brush-btn active" onclick="setBrushSize(12, this)">Sederhana</button>
+        <button class="brush-btn" onclick="setBrushSize(22, this)">Tebal</button>
+      </div>
+    </section>
+
+    <!-- GAME 8: PIANO (PRO) -->
+    <section id="screen-piano" class="screen">
+      <div class="game-topbar">
+        <button class="btn-back" onclick="goHome()">⬅ Menu</button>
+        <span class="game-title">Piano Ceria</span>
+        <span style="width:48px;"></span>
+      </div>
+      <div class="song-guide-box">
+        <span id="songStatus">🎵 Mod Bebas</span>
+        <button class="btn-back" style="padding:5px 10px;font-size:0.78rem;" onclick="toggleSongGuide()">⭐ Main Lagu Bintang</button>
+      </div>
+      <div class="piano-grid" id="pianoGrid"></div>
+    </section>
+  </div>
+
+  <!-- PARENT GATE MODAL -->
+  <div id="parentGateModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="font-size:38px;margin-bottom:6px;">🔐</div>
+      <h3>Pengesahan Ibu Bapa</h3>
+      <p>Sila jawab soalan mudah ini untuk masuk:</p>
+      <div id="gateQuestion" style="font-size:1.6rem;font-weight:900;margin-bottom:12px;color:var(--primary-dark);">3 × 4 = ?</div>
+      <input id="gateInput" class="promo-input" type="number" inputmode="numeric" placeholder="Jawapan" />
+      <button class="btn-primary" onclick="verifyParentGate()">Sahkan</button>
+      <button class="btn-ghost" onclick="closeParentGate()">Batal</button>
+    </div>
+  </div>
+
+  <!-- PRO UPGRADE MODAL -->
+  <div id="proModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="font-size:42px;margin-bottom:4px;">👑</div>
+      <h3>CeriaKids Pek Lengkap Pro</h3>
+      <p>Bantu anak bersedia ke prasekolah dengan pembelajaran interaktif bebas iklan.</p>
+
+      <div class="pro-benefits">
+        ✅ Eja Suku Kata Bahasa Melayu (KV+KV)<br/>
+        ✅ Kenal & Dengar Huruf Hijaiyah (Alif Ba Ta)<br/>
+        ✅ Latihan Matematik Tambah Pantas<br/>
+        ✅ Kanvas Melukis & Piano Lagu Bintang<br/>
+        ✅ 100% Bebas Iklan & Boleh Main Offline
+      </div>
+
+      <div class="price-banner">Bayar Sekali Sahaja: RM15 (Akses Selamanya)</div>
+
+      <!-- GANTI NOMBOR WHATSAPP DI BAWAH DENGAN NOMBOR ANDA -->
+      <a class="btn-whatsapp" href="https://wa.me/60123456789?text=Hai%2C%20saya%20berminat%20untuk%20dapatkan%20Kod%20Pek%20Pro%20CeriaKids%20(RM15)" target="_blank">
+        💬 Dapatkan Kod Akses (WhatsApp)
+      </a>
+
+      <input id="promoInput" class="promo-input" type="text" placeholder="MASUKKAN KOD AKSES" />
+      <button class="btn-primary" onclick="unlockPro()">Aktifkan Kod Pro</button>
+      <button class="btn-ghost" onclick="closeProModal()">Tutup</button>
+    </div>
+  </div>
+
+  <!-- SCREEN TIME LOCK OVERLAY -->
+  <div id="timeUpModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="font-size:56px;margin-bottom:8px;">🌙</div>
+      <h3>Masa Bermain Sudah Tamat!</h3>
+      <p>Hebat sekali hari ini! Jom rehatkan mata dan minum air dahulu. Jumpa lagi nanti ya!</p>
+      <button class="btn-primary" onclick="openParentGate('unlockTimer')">Ibu Bapa: Tambah Masa</button>
+    </div>
+  </div>
+
+  <div id="toast" class="feedback-toast">Hebat! +1 ⭐</div>
+
+  <script>
+    // --- AUDIO & VOICE ENGINE ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playTone(freq, type = 'sine', duration = 0.18) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playSuccessSound() {
+      playTone(523.25, 'triangle', 0.12);
+      setTimeout(() => playTone(659.25, 'triangle', 0.12), 110);
+      setTimeout(() => playTone(783.99, 'triangle', 0.25), 220);
+      spawnConfetti();
+    }
+
+    function playErrorSound() {
+      playTone(210, 'sawtooth', 0.2);
+    }
+
+    function speakBM(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ms-MY';
+        utter.rate = 0.9;
+        utter.pitch = 1.12;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    function spawnConfetti() {
+      const colors = ['#FF7A00', '#22C55E', '#3B82F6', '#FACC15', '#EC4899', '#8B5CF6'];
+      for (let i = 0; i < 18; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.animationDuration = (0.7 + Math.random() * 0.6) + 's';
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1300);
+      }
+    }
+
+    // --- STATE & STORAGE ---
+    const todayKey = new Date().toISOString().slice(0, 10);
+    let stars = parseInt(localStorage.getItem('ck_stars') || '0', 10);
+    let totalStarsEarned = parseInt(localStorage.getItem('ck_total_stars') || String(stars), 10);
+    let isPro = localStorage.getItem('ck_pro') === 'true';
+    let unlockedStickers = JSON.parse(localStorage.getItem('ck_stickers') || '[]');
+    let dailyProgress = JSON.parse(localStorage.getItem('ck_daily') || `{"date":"${todayKey}","count":0}`);
+    if (dailyProgress.date !== todayKey) {
+      dailyProgress = { date: todayKey, count: 0 };
+    }
+    let stats = JSON.parse(localStorage.getItem('ck_stats') || '{"syllable":0,"hijaiyah":0,"math":0,"general":0}');
+
+    function saveState() {
+      localStorage.setItem('ck_stars', stars);
+      localStorage.setItem('ck_total_stars', totalStarsEarned);
+      localStorage.setItem('ck_stickers', JSON.stringify(unlockedStickers));
+      localStorage.setItem('ck_daily', JSON.stringify(dailyProgress));
+      localStorage.setItem('ck_stats', JSON.stringify(stats));
+    }
+
+    function updateUI() {
+      document.getElementById('starCount').textContent = stars;
+      document.getElementById('dailyCount').textContent = Math.min(dailyProgress.count, 5);
+      document.getElementById('dailyFill').style.width = Math.min((dailyProgress.count / 5) * 100, 100) + '%';
+      document.getElementById('stickerCountHome').textContent = unlockedStickers.length;
+
+      if (isPro) {
+        document.querySelectorAll('.pro-badge-item').forEach(el => {
+          el.textContent = '⭐ Pro';
+          el.className = 'tag tag-free pro-badge-item';
+        });
+        document.getElementById('parentProStatus').textContent = 'Pek Pro Aktif ✅';
+      } else {
+        document.getElementById('parentProStatus').textContent = 'Versi Percuma';
+      }
+
+      document.getElementById('statTotalStars').textContent = totalStarsEarned + ' ⭐';
+      document.getElementById('statSyllable').textContent = stats.syllable + ' Betul';
+      document.getElementById('statHijaiyah').textContent = stats.hijaiyah + ' Betul';
+      document.getElementById('statMath').textContent = stats.math + ' Betul';
+      document.getElementById('statGeneral').textContent = stats.general + ' Betul';
+    }
+
+    function addStar(amount = 1, msg = 'Hebat! +1 ⭐', category = 'general') {
+      stars += amount;
+      totalStarsEarned += amount;
+      dailyProgress.count += amount;
+      if (stats[category] !== undefined) stats[category] += 1;
+      saveState();
+      updateUI();
+      showToast(msg);
+    }
+
+    function showToast(text) {
+      const t = document.getElementById('toast');
+      t.textContent = text;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 1400);
+    }
+
+    // --- SCREEN TIME CONTROLLER ---
+    let timerInterval = null;
+    let remainingSeconds = 0;
+
+    function setScreenTimer(minutes, btn) {
+      clearInterval(timerInterval);
+      document.querySelectorAll('.timer-opt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      if (minutes === 0) {
+        remainingSeconds = 0;
+        document.getElementById('timerBar').style.display = 'none';
+        showToast('Had masa dimatikan');
+        return;
+      }
+
+      remainingSeconds = minutes * 60;
+      document.getElementById('timerBar').style.display = 'block';
+      updateTimerDisplay();
+      showToast(`Had masa ditetapkan: ${minutes} minit`);
+
+      timerInterval = setInterval(() => {
+        remainingSeconds--;
+        updateTimerDisplay();
+        if (remainingSeconds <= 0) {
+          clearInterval(timerInterval);
+          document.getElementById('timeUpModal').classList.add('open');
+          speakBM('Masa bermain sudah tamat. Jom rehat dahulu.');
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const m = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+      const s = String(remainingSeconds % 60).padStart(2, '0');
+      document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+    }
+
+    // --- PARENT GATE ---
+    let gateAnswer = 0;
+    let gateAction = '';
+
+    function openParentGate(action) {
+      gateAction = action;
+      const a = Math.floor(Math.random() * 5) + 3;
+      const b = Math.floor(Math.random() * 5) + 2;
+      gateAnswer = a * b;
+      document.getElementById('gateQuestion').textContent = `${a} × ${b} = ?`;
+      document.getElementById('gateInput').value = '';
+      document.getElementById('parentGateModal').classList.add('open');
+    }
+
+    function closeParentGate() {
+      document.getElementById('parentGateModal').classList.remove('open');
+    }
+
+    function verifyParentGate() {
+      const val = parseInt(document.getElementById('gateInput').value, 10);
+      if (val === gateAnswer) {
+        closeParentGate();
+        if (gateAction === 'dashboard') {
+          updateUI();
+          switchScreen('screen-parent');
+        } else if (gateAction === 'pro') {
+          openProModal();
+        } else if (gateAction === 'unlockTimer') {
+          document.getElementById('timeUpModal').classList.remove('open');
+          switchScreen('screen-parent');
+        }
+      } else {
+        playErrorSound();
+        showToast('Jawapan salah. Cuba lagi.');
+      }
+    }
+
+    function resetProgress() {
+      if (confirm('Padam semua bintang, pelekat dan rekod pembelajaran anak?')) {
+        stars = 0;
+        totalStarsEarned = 0;
+        unlockedStickers = [];
+        dailyProgress = { date: todayKey, count: 0 };
+        stats = { syllable: 0, hijaiyah: 0, math: 0, general: 0 };
+        saveState();
+        updateUI();
+        showToast('Rekod telah diset semula.');
+      }
+    }
+
+    // --- NAVIGATION ---
+    function switchScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function goHome() {
+      playTone(400, 'sine', 0.08);
+      switchScreen('screen-home');
+    }
+
+    function openStickers() {
+      playTone(540, 'sine', 0.08);
+      renderStickers();
+      switchScreen('screen-stickers');
+    }
+
+    function openGame(game) {
+      playTone(500, 'sine', 0.08);
+      const proGames = ['syllable', 'hijaiyah', 'addition', 'draw', 'piano'];
+      if (proGames.includes(game) && !isPro) {
+        openParentGate('pro');
+        return;
+      }
+
+      if (game === 'memory') { initMemory(); switchScreen('screen-memory'); }
+      else if (game === 'math') { initMath(); switchScreen('screen-math'); }
+      else if (game === 'color') { initColorGame(); switchScreen('screen-color'); }
+      else if (game === 'syllable') { initSyllable(); switchScreen('screen-syllable'); }
+      else if (game === 'hijaiyah') { initHijaiyah(); switchScreen('screen-hijaiyah'); }
+      else if (game === 'addition') { initAddition(); switchScreen('screen-addition'); }
+      else if (game === 'draw') { switchScreen('screen-draw'); initCanvas(); }
+      else if (game === 'piano') { initPiano(); switchScreen('screen-piano'); }
+    }
+
+    // --- PRO UNLOCK ---
+    function openProModal() { document.getElementById('proModal').classList.add('open'); }
+    function closeProModal() { document.getElementById('proModal').classList.remove('open'); }
+    function unlockPro() {
+      const code = document.getElementById('promoInput').value.trim().toUpperCase();
+      if (code === 'CERIAPRO') {
+        isPro = true;
+        localStorage.setItem('ck_pro', 'true');
+        updateUI();
+        closeProModal();
+        playSuccessSound();
+        showToast('Tahniah! Pek Pro Aktif! 👑');
+      } else {
+        playErrorSound();
+        showToast('Kod tidak sah');
+      }
+    }
+
+    // --- STICKER ALBUM ---
+    const stickerCatalog = [
+      { id: 'dino', emoji: '🦖', name: 'Dinosaur', cost: 2 },
+      { id: 'rocket', emoji: '🚀', name: 'Roket', cost: 3 },
+      { id: 'unicorn', emoji: '🦄', name: 'Unicorn', cost: 3 },
+      { id: 'robot', emoji: '🤖', name: 'Robot', cost: 4 },
+      { id: 'panda', emoji: '🐼', name: 'Panda', cost: 4 },
+      { id: 'car', emoji: '🏎️', name: 'Kereta Lumba', cost: 5 },
+      { id: 'crown', emoji: '👑', name: 'Mahkota', cost: 5 },
+      { id: 'whale', emoji: '🐳', name: 'Ikan Paus', cost: 6 },
+      { id: 'butterfly', emoji: '🦋', name: 'Rama-rama', cost: 6 },
+      { id: 'astro', emoji: '👨‍🚀', name: 'Angkasawan', cost: 8 },
+      { id: 'castle', emoji: '🏰', name: 'Istana', cost: 8 },
+      { id: 'trophy', emoji: '🏆', name: 'Juara', cost: 10 }
+    ];
+
+    function renderStickers() {
+      const grid = document.getElementById('stickerGrid');
+      grid.innerHTML = '';
+      stickerCatalog.forEach(st => {
+        const isOwned = unlockedStickers.includes(st.id);
+        const card = document.createElement('div');
+        card.className = 'sticker-item ' + (isOwned ? 'unlocked' : 'locked');
+        card.innerHTML = `
+          <span class="sticker-emoji">${st.emoji}</span>
+          <span class="sticker-name">${st.name}</span>
+          <span class="sticker-cost">${isOwned ? '✅ Dimiliki' : '⭐ ' + st.cost}</span>
+        `;
+        card.onclick = () => {
+          if (isOwned) {
+            playTone(660, 'triangle', 0.15);
+            speakBM(st.name);
+            card.classList.add('pop-anim');
+            setTimeout(() => card.classList.remove('pop-anim'), 350);
+          } else if (stars >= st.cost) {
+            stars -= st.cost;
+            unlockedStickers.push(st.id);
+            saveState();
+            updateUI();
+            renderStickers();
+            playSuccessSound();
+            speakBM('Tahniah! Anda dapat pelekat ' + st.name);
+            showToast(`Pelekat ${st.name} Dibuka! 🎉`);
+          } else {
+            playErrorSound();
+            showToast(`Perlukan ${st.cost} ⭐ untuk buka!`);
+          }
+        };
+        grid.appendChild(card);
+      });
+    }
+
+    // --- GAME 1: MEMORY ---
+    const animals = ['🐱', '🐯', '🐘', '🐵', '🐸', '🐢'];
+    let flippedCards = [];
+    let matchedCount = 0;
+
+    function initMemory() {
+      const grid = document.getElementById('memoryGrid');
+      grid.innerHTML = '';
+      flippedCards = [];
+      matchedCount = 0;
+      const deck = [...animals, ...animals].sort(() => Math.random() - 0.5);
+      deck.forEach(emoji => {
+        const card = document.createElement('div');
+        card.className = 'mem-card';
+        card.textContent = '?';
+        card.dataset.emoji = emoji;
+        card.onclick = () => flipCard(card);
+        grid.appendChild(card);
+      });
+    }
+
+    function flipCard(card) {
+      if (card.classList.contains('flipped') || card.classList.contains('matched') || flippedCards.length === 2) return;
+      playTone(440, 'sine', 0.1);
+      card.classList.add('flipped');
+      card.textContent = card.dataset.emoji;
+      flippedCards.push(card);
+
+      if (flippedCards.length === 2) {
+        const [c1, c2] = flippedCards;
+        if (c1.dataset.emoji === c2.dataset.emoji) {
+          setTimeout(() => {
+            c1.classList.add('matched');
+            c2.classList.add('matched');
+            flippedCards = [];
+            matchedCount++;
+            playTone(660, 'triangle', 0.15);
+            if (matchedCount === animals.length) {
+              playSuccessSound();
+              speakBM('Tahniah! Semua haiwan berjaya dipadankan.');
+              addStar(2, 'Semua Padan! +2 ⭐', 'general');
+              setTimeout(initMemory, 1600);
+            }
+          }, 320);
+        } else {
+          setTimeout(() => {
+            c1.classList.remove('flipped');
+            c2.classList.remove('flipped');
+            c1.textContent = '?';
+            c2.textContent = '?';
+            flippedCards = [];
+          }, 700);
+        }
+      }
+    }
+
+    // --- GAME 2: MATH COUNTING ---
+    const mathItems = ['🍎', '🍌', '🍓', '🚗', '⭐', '🎈', '🐟'];
+    let currentAnswer = 0;
+
+    function initMath() {
+      const count = Math.floor(Math.random() * 8) + 2;
+      currentAnswer = count;
+      const item = mathItems[Math.floor(Math.random() * mathItems.length)];
+      const box = document.getElementById('mathObjects');
+      box.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const span = document.createElement('span');
+        span.textContent = item;
+        box.appendChild(span);
+      }
+
+      let choices = new Set([count]);
+      while (choices.size < 3) choices.add(Math.floor(Math.random() * 9) + 1);
+
+      const optContainer = document.getElementById('mathOptions');
+      optContainer.innerHTML = '';
+      Array.from(choices).sort(() => Math.random() - 0.5).forEach(num => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-option';
+        btn.textContent = num;
+        btn.onclick = () => {
+          if (num === currentAnswer) {
+            playSuccessSound();
+            speakBM('Betul! ' + num);
+            addStar(1, 'Betul! +1 ⭐', 'math');
+            setTimeout(initMath, 950);
+          } else {
+            playErrorSound();
+            showToast('Cuba kira semula! 🔍');
+          }
+        };
+        optContainer.appendChild(btn);
+      });
+    }
+
+    // --- GAME 3: TEKA WARNA ---
+    const colorBank = [
+      { name: 'Merah', hex: '#EF4444', emoji: '🍎' },
+      { name: 'Biru', hex: '#3B82F6', emoji: '🐳' },
+      { name: 'Hijau', hex: '#22C55E', emoji: '🐸' },
+      { name: 'Kuning', hex: '#FACC15', emoji: '🍌' },
+      { name: 'Ungu', hex: '#A855F7', emoji: '🍇' },
+      { name: 'Oren', hex: '#F97316', emoji: '🍊' }
+    ];
+    let targetColor = null;
+
+    function initColorGame() {
+      targetColor = colorBank[Math.floor(Math.random() * colorBank.length)];
+      const circle = document.getElementById('colorCircle');
+      circle.style.background = targetColor.hex;
+      circle.textContent = targetColor.emoji;
+
+      let choices = [targetColor];
+      while (choices.length < 3) {
+        const c = colorBank[Math.floor(Math.random() * colorBank.length)];
+        if (!choices.some(item => item.name === c.name)) choices.push(c);
+      }
+      choices.sort(() => Math.random() - 0.5);
+
+      const optContainer = document.getElementById('colorOptions');
+      optContainer.innerHTML = '';
+      choices.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-color-choice';
+        btn.textContent = c.name;
+        btn.onclick = () => {
+          if (c.name === targetColor.name) {
+            playSuccessSound();
+            speakBM('Betul! Warna ' + c.name);
+            addStar(1, `Warna ${c.name}! +1 ⭐`, 'general');
+            setTimeout(initColorGame, 1100);
+          } else {
+            playErrorSound();
+            speakBM('Itu warna ' + c.name);
+            showToast('Cuba warna lain!');
+          }
+        };
+        optContainer.appendChild(btn);
+      });
+    }
+
+    // --- GAME 4: SUKU KATA ---
+    const wordBank = [
+      { emoji: '⚽', first: 'BO', second: 'LA', distractors: ['KU', 'TU'] },
+      { emoji: '📕', first: 'BU', second: 'KU', distractors: ['LA', 'MA'] },
+      { emoji: '👀', first: 'MA', second: 'TA', distractors: ['KI', 'JA'] },
+      { emoji: '🪑', first: 'ME', second: 'JA', distractors: ['SA', 'RU'] },
+      { emoji: '👕', first: 'BA', second: 'JU', distractors: ['TU', 'PI'] },
+      { emoji: '🧢', first: 'TO', second: 'PI', distractors: ['LA', 'KU'] },
+      { emoji: '🦷', first: 'GI', second: 'GI', distractors: ['SU', 'PA'] },
+      { emoji: '🥛', first: 'SU', second: 'SU', distractors: ['KO', 'RI'] },
+      { emoji: '👣', first: 'KA', second: 'KI', distractors: ['BI', 'MU'] },
+      { emoji: '🍞', first: 'RO', second: 'TI', distractors: ['BA', 'KU'] }
+    ];
+    let currentWord = wordBank[0];
+
+    function initSyllable() {
+      currentWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+      document.getElementById('wordEmoji').textContent = currentWord.emoji;
+      document.getElementById('slotFirst').textContent = currentWord.first;
+      const secondSlot = document.getElementById('slotSecond');
+      secondSlot.textContent = '?';
+      secondSlot.classList.remove('filled');
+
+      const opts = [currentWord.second, ...currentWord.distractors].sort(() => Math.random() - 0.5);
+      const container = document.getElementById('syllableOptions');
+      container.innerHTML = '';
+      opts.forEach(syl => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-syllable';
+        btn.textContent = syl;
+        btn.onclick = () => {
+          if (syl === currentWord.second) {
+            const fullWord = currentWord.first + currentWord.second;
+            secondSlot.textContent = syl;
+            secondSlot.classList.add('filled');
+            playSuccessSound();
+            speakBM(fullWord);
+            addStar(1, `Pandai! ${fullWord}! +1 ⭐`, 'syllable');
+            setTimeout(initSyllable, 1200);
+          } else {
+            playErrorSound();
+            showToast('Kurang tepat, cuba lagi!');
+          }
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    // --- GAME 5: HIJAIYAH ---
+    const hijaiyahBank = [
+      { char: 'أ', name: 'Alif' }, { char: 'ب', name: 'Ba' },
+      { char: 'ت', name: 'Ta' }, { char: 'ث', name: 'Tha' },
+      { char: 'ج', name: 'Jim' }, { char: 'ح', name: 'Ha' },
+      { char: 'خ', name: 'Kho' }, { char: 'د', name: 'Dal' },
+      { char: 'ر', name: 'Ro' }, { char: 'س', name: 'Sin' },
+      { char: 'ش', name: 'Syin' }, { char: 'ص', name: 'Sod' },
+      { char: 'ع', name: 'Ain' }, { char: 'ف', name: 'Fa' },
+      { char: 'ق', name: 'Qof' }, { char: 'ك', name: 'Kaf' },
+      { char: 'ل', name: 'Lam' }, { char: 'م', name: 'Mim' },
+      { char: 'ن', name: 'Nun' }, { char: 'و', name: 'Wau' },
+      { char: 'ي', name: 'Ya' }
+    ];
+    let currentHijaiyah = hijaiyahBank[0];
+
+    function initHijaiyah() {
+      currentHijaiyah = hijaiyahBank[Math.floor(Math.random() * hijaiyahBank.length)];
+      document.getElementById('hijaiyahChar').textContent = currentHijaiyah.char;
+
+      let choices = [currentHijaiyah];
+      while (choices.length < 3) {
+        const h = hijaiyahBank[Math.floor(Math.random() * hijaiyahBank.length)];
+        if (!choices.some(item => item.name === h.name)) choices.push(h);
+      }
+      choices.sort(() => Math.random() - 0.5);
+
+      const container = document.getElementById('hijaiyahOptions');
+      container.innerHTML = '';
+      choices.forEach(h => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-hijaiyah';
+        btn.textContent = h.name;
+        btn.onclick = () => {
+          if (h.name === currentHijaiyah.name) {
+            playSuccessSound();
+            speakBM('Betul! Huruf ' + h.name);
+            addStar(1, `MasyaAllah! Huruf ${h.name}! +1 ⭐`, 'hijaiyah');
+            setTimeout(initHijaiyah, 1200);
+          } else {
+            playErrorSound();
+            showToast('Cuba lagi ya!');
+          }
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    // --- GAME 6: TAMBAH PANTAS ---
+    let addAnswer = 0;
+
+    function initAddition() {
+      const a = Math.floor(Math.random() * 5) + 1;
+      const b = Math.floor(Math.random() * 5) + 1;
+      addAnswer = a + b;
+      document.getElementById('addEquation').textContent = `${a} + ${b} = ?`;
+
+      const vis = document.getElementById('addVisual');
+      vis.innerHTML = `${'🍎'.repeat(a)} <span style="font-size:24px;font-weight:900;color:#64748B;">➕</span> ${'🍏'.repeat(b)}`;
+
+      let choices = new Set([addAnswer]);
+      while (choices.size < 3) choices.add(Math.floor(Math.random() * 10) + 2);
+
+      const container = document.getElementById('addOptions');
+      container.innerHTML = '';
+      Array.from(choices).sort(() => Math.random() - 0.5).forEach(num => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-option';
+        btn.style.background = '#F59E0B';
+        btn.style.boxShadow = '0 6px 0 #B45309';
+        btn.textContent = num;
+        btn.onclick = () => {
+          if (num === addAnswer) {
+            playSuccessSound();
+            speakBM(`${a} tambah ${b} sama dengan ${addAnswer}`);
+            addStar(1, `Hebat! Jawapannya ${addAnswer}! +1 ⭐`, 'math');
+            setTimeout(initAddition, 1150);
+          } else {
+            playErrorSound();
+            showToast('Cuba kira epal bersama-sama!');
+          }
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    // --- GAME 7: MELUKIS JARI ---
+    let brushColor = '#EF4444';
+    let brushSize = 12;
+    let isDrawing = false;
+    let canvasReady = false;
+
+    function setBrushSize(size, btn) {
+      brushSize = size;
+      document.querySelectorAll('.brush-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function initCanvas() {
+      const canvas = document.getElementById('drawCanvas');
+      const rect = canvas.getBoundingClientRect();
+      if (!canvasReady) {
+        canvas.width = rect.width;
+        canvas.height = 290;
+      }
+      const ctx = canvas.getContext('2d');
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      const paletteColors = ['#EF4444', '#F97316', '#FACC15', '#22C55E', '#3B82F6', '#A855F7', '#1E293B'];
+      const row = document.getElementById('paletteRow');
+      row.innerHTML = '';
+      paletteColors.forEach((col, idx) => {
+        const dot = document.createElement('div');
+        dot.className = 'swatch' + (col === brushColor ? ' active' : '');
+        dot.style.background = col;
+        dot.onclick = () => {
+          brushColor = col;
+          document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+          dot.classList.add('active');
+          playTone(520, 'sine', 0.08);
+        };
+        row.appendChild(dot);
+      });
+
+      if (canvasReady) return;
+      canvasReady = true;
+
+      const getPos = (e) => {
+        const r = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - r.left, y: clientY - r.top };
+      };
+
+      const startDraw = (e) => {
+        isDrawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+      };
+
+      const draw = (e) => {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+        ctx.lineWidth = brushSize;
+        ctx.strokeStyle = brushColor;
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+      };
+
+      const stopDraw = () => { isDrawing = false; };
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', draw);
+      window.addEventListener('mouseup', stopDraw);
+      canvas.addEventListener('touchstart', startDraw, { passive: false });
+      canvas.addEventListener('touchmove', draw, { passive: false });
+      canvas.addEventListener('touchend', stopDraw);
+    }
+
+    function clearCanvas() {
+      const canvas = document.getElementById('drawCanvas');
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      playTone(300, 'sine', 0.12);
+    }
+
+    // --- GAME 8: PIANO & LAGU BINTANG KECIL ---
+    const pianoNotes = [
+      { id: 0, label: 'DO', emoji: '🐶', freq: 261.63, color: '#EF4444', dark: '#B91C1C' },
+      { id: 1, label: 'RE', emoji: '🐱', freq: 293.66, color: '#F97316', dark: '#C2410C' },
+      { id: 2, label: 'MI', emoji: '🐸', freq: 329.63, color: '#EAB308', dark: '#A16207' },
+      { id: 3, label: 'FA', emoji: '🐵', freq: 349.23, color: '#22C55E', dark: '#15803D' },
+      { id: 4, label: 'SOL', emoji: '🦁', freq: 392.00, color: '#3B82F6', dark: '#1D4ED8' },
+      { id: 5, label: 'LA', emoji: '🐼', freq: 440.00, color: '#8B5CF6', dark: '#6D28D9' },
+      { id: 6, label: 'SI', emoji: '🦄', freq: 493.88, color: '#EC4899', dark: '#BE185D' },
+      { id: 7, label: 'DO+', emoji: '🌟', freq: 523.25, color: '#14B8A6', dark: '#0F766E' }
+    ];
+    // Twinkle Twinkle Little Star sequence (DO DO SOL SOL LA LA SOL)
+    const starSong = [0, 0, 4, 4, 5, 5, 4, 3, 3, 2, 2, 1, 1, 0];
+    let guideActive = false;
+    let guideIndex = 0;
+
+    function initPiano() {
+      guideActive = false;
+      guideIndex = 0;
+      document.getElementById('songStatus').textContent = '🎵 Mod Bebas';
+      renderPianoKeys();
+    }
+
+    function toggleSongGuide() {
+      guideActive = !guideActive;
+      guideIndex = 0;
+      document.getElementById('songStatus').textContent = guideActive ? '⭐ Tekan butang bercahaya!' : '🎵 Mod Bebas';
+      renderPianoKeys();
+    }
+
+    function renderPianoKeys() {
+      const grid = document.getElementById('pianoGrid');
+      grid.innerHTML = '';
+      pianoNotes.forEach(note => {
+        const btn = document.createElement('button');
+        btn.className = 'piano-key';
+        if (guideActive && starSong[guideIndex] === note.id) {
+          btn.classList.add('guide-glow');
+        }
+        btn.style.background = note.color;
+        btn.style.boxShadow = `0 6px 0 ${note.dark}`;
+        btn.innerHTML = `<span>${note.emoji}</span>${note.label}`;
+        btn.onclick = () => {
+          playTone(note.freq, 'triangle', 0.35);
+          if (guideActive && starSong[guideIndex] === note.id) {
+            guideIndex++;
+            if (guideIndex >= starSong.length) {
+              guideActive = false;
+              document.getElementById('songStatus').textContent = '🎉 Lagu Selesai!';
+              playSuccessSound();
+              addStar(2, 'Pandai Main Piano! +2 ⭐', 'general');
+            }
+            renderPianoKeys();
+          }
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    // --- INLINE PWA MANIFEST ---
+    const manifest = {
+      name: 'CeriaKids Pro - Belajar Sambil Bermain',
+      short_name: 'CeriaKids',
+      start_url: '.',
+      display: 'standalone',
+      background_color: '#FFF9EC',
+      theme_color: '#FF7A00',
+      icons: [{
+        src: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23FF7A00%22/><text y=%22.9em%22 font-size=%2275%22 x=%2212%22>🦁</text></svg>',
+        sizes: '512x512',
+        type: 'image/svg+xml'
+      }]
+    };
+    const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+    const manifestLink = document.createElement('link');
+    manifestLink.rel = 'manifest';
+    manifestLink.href = URL.createObjectURL(manifestBlob);
+    document.head.appendChild(manifestLink);
+
+    updateUI();
+  </script>
+</body>
+</html>
